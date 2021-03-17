@@ -1,6 +1,6 @@
 package ru.park.homework1;
 
-import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,14 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 public class NumsAdapter extends RecyclerView.Adapter<NumViewHolder> {
-    private List<Integer> numbers;
-    private View.OnClickListener itemListener;
 
-    NumsAdapter(@NonNull final View.OnClickListener itemListener) {
-        this.itemListener = itemListener;
+    public void setCallback(ListFragment.Callback callback) {
+        this.callback = callback;
     }
 
     @NonNull
@@ -23,21 +19,21 @@ public class NumsAdapter extends RecyclerView.Adapter<NumViewHolder> {
     public NumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.item, parent, false);
-        view.findViewById(R.id.text_view).setOnClickListener(itemListener);
         return new NumViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NumViewHolder holder, int position) {
-        holder.feedData(numbers.get(position));
+        int number = NumsRepository.getNumAt(position);
+        int color = number % 2 == 0 ? Color.RED : Color.BLUE;
+
+        holder.feedData(number, color, callback);
     }
 
     @Override
     public int getItemCount() {
-        return numbers.size();
+        return NumsRepository.getNumsCount();
     }
 
-    public void updateNumbers(List<Integer> numbers) {
-        this.numbers = numbers;
-    }
+    private ListFragment.Callback callback;
 }

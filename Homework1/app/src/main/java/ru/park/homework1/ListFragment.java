@@ -1,7 +1,10 @@
 package ru.park.homework1;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -10,42 +13,56 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 public class ListFragment extends Fragment {
-    RecyclerView recyclerView;
-    NumsAdapter numsAdapter;
 
-    View.OnClickListener listener;
+    /**
+     * Интерфейс для взаимодействия с элементами в списке во фрагменте
+     */
+    public interface Callback {
+        void invoke(int number, int color);
+    }
 
-    public ListFragment(View.OnClickListener itemListener) {
+    public ListFragment() {
         super(R.layout.list_fragment);
-        numsAdapter = new NumsAdapter(itemListener);
     }
 
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
+    @Nullable
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        if (view == null)
+            return null;
+
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), getColsCount()));
+
+        final NumsAdapter adapter = new NumsAdapter();
+        adapter.setCallback(callback);
+        recyclerView.setAdapter(adapter);
+
         Button addButton = view.findViewById(R.id.button_add);
-        addButton.setOnClickListener(listener);
-
-        recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
-        recyclerView.setAdapter(numsAdapter);
-    }
-
-    public void feedNumsList(@NonNull List<Integer> numbers) {
-        numsAdapter.updateNumbers(numbers);
-        numsAdapter.notifyDataSetChanged(); // bad for now
-    }
-
-    public void setAddCallback(@NonNull final View.OnClickListener listener) {
-        this.listener = new View.OnClickListener() {
-
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onClick(view);
-                numsAdapter.notifyDataSetChanged(); // bad bad bad
+                adapter.notifyItemInserted(NumsRepository.appendNum());
             }
-        };
+        });
+
+        return view;
     }
+
+    private int getColsCount() {
+        int orientation = getResources().getConfiguration().orientation;
+        boolean landscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+        return landscape ? 3 : 4;
+    }
+
+    private Callback callback;
 }
