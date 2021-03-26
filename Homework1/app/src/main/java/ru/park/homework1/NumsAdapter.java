@@ -1,6 +1,5 @@
 package ru.park.homework1;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NumsAdapter extends RecyclerView.Adapter<NumViewHolder> {
 
+    private ListFragment.Callback callback;
+
     public void setCallback(ListFragment.Callback callback) {
         this.callback = callback;
     }
@@ -18,22 +19,18 @@ public class NumsAdapter extends RecyclerView.Adapter<NumViewHolder> {
     @Override
     public NumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item, parent, false);
+                .inflate(R.layout.item, parent, false);
         return new NumViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NumViewHolder holder, int position) {
-        int number = NumsRepository.getNumAt(position);
-        int color = number % 2 == 0 ? Color.RED : Color.BLUE;
-
-        holder.feedData(number, color, callback);
+        NumModel model = NumModelRepository.getNumAt(position);
+        holder.feedData(model, callback);
     }
 
     @Override
     public int getItemCount() {
-        return NumsRepository.getNumsCount();
+        return NumModelRepository.getNumsCount();
     }
-
-    private ListFragment.Callback callback;
 }

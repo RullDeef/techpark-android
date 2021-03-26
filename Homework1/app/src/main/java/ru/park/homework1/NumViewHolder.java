@@ -11,16 +11,16 @@ public class NumViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void feedData(final int number, final int color, final ListFragment.Callback callback) {
+    public void feedData(final NumModel model, final ListFragment.Callback callback) {
         TextView textView = itemView.findViewById(R.id.text_view);
 
-        textView.setText(String.valueOf(number));
-        textView.setTextColor(color);
+        textView.setText(String.valueOf(model.getNumber()));
+        textView.setTextColor(model.getColor());
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callback.invoke(number, color);
+                callback.invoke(model);
             }
         });
     }

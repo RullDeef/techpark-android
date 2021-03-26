@@ -1,45 +1,61 @@
 package ru.park.homework1;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
+import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    public MainActivity() {
-        super();
+    private ListFragment listFragment;
+    private DisplayFragment displayFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            listFragment = new ListFragment();
+            displayFragment = new DisplayFragment();
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_container, listFragment, ListFragment.TAG)
+                    .commit();
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ListFragment.TAG);
+            if (fragment != null)
+                listFragment = (ListFragment) fragment;
+            else
+                listFragment = new ListFragment();
+
+            fragment = getSupportFragmentManager().findFragmentByTag(DisplayFragment.TAG);
+            if (fragment != null) {
+                displayFragment = (DisplayFragment) fragment;
+                // load displayed model from bundle
+
+            }
+            else
+                displayFragment = new DisplayFragment();
+        }
 
         listFragment.setCallback(new ListFragment.Callback() {
             @Override
-            public void invoke(int number, int color) {
-                displayNumber(number, color);
+            public void invoke(NumModel model) {
+                displayNumModel(model);
             }
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(null);
-        setContentView(R.layout.activity_main);
+    private void displayNumModel(final @NonNull NumModel model) {
+        displayFragment.setDisplayNumModel(model);
 
         getSupportFragmentManager()
-            .beginTransaction()
-            .add(R.id.fragment_container, listFragment, null)
-            .commit();
+                .beginTransaction()
+                .replace(R.id.fragment_container, displayFragment, DisplayFragment.TAG)
+                .addToBackStack(null)
+                .commit();
     }
-
-    private void displayNumber(final @NonNull Integer number, int color) {
-        displayFragment.setDisplayNumber(number, color);
-
-        getSupportFragmentManager()
-            .beginTransaction()
-            .remove(listFragment)
-            .add(R.id.fragment_container, displayFragment, null)
-            .addToBackStack(null)
-            .commit();
-    }
-
-    private ListFragment listFragment = new ListFragment();
-    private DisplayFragment displayFragment = new DisplayFragment();
 }

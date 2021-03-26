@@ -15,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ListFragment extends Fragment {
 
-    /**
-     * Интерфейс для взаимодействия с элементами в списке во фрагменте
-     */
-    public interface Callback {
-        void invoke(int number, int color);
-    }
+    public static final String TAG = "list_fragment";
+
+    private Callback callback;
 
     public ListFragment() {
         super(R.layout.list_fragment);
@@ -50,7 +47,7 @@ public class ListFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.notifyItemInserted(NumsRepository.appendNum());
+                adapter.notifyItemInserted(NumModelRepository.appendNum());
             }
         });
 
@@ -61,8 +58,13 @@ public class ListFragment extends Fragment {
         int orientation = getResources().getConfiguration().orientation;
         boolean landscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-        return landscape ? 3 : 4;
+        return landscape ? 4 : 3;
     }
 
-    private Callback callback;
+    /**
+     * Интерфейс для взаимодействия с элементами в списке во фрагменте
+     */
+    public interface Callback {
+        void invoke(NumModel model);
+    }
 }
