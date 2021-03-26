@@ -17,13 +17,13 @@ public class ListFragment extends Fragment {
 
     public static final String TAG = "list_fragment";
 
-    private Callback callback;
+    private NumModel.Callback callback;
 
     public ListFragment() {
         super(R.layout.list_fragment);
     }
 
-    public void setCallback(Callback callback) {
+    public void setCallback(NumModel.Callback callback) {
         this.callback = callback;
     }
 
@@ -59,12 +59,5 @@ public class ListFragment extends Fragment {
         boolean landscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         return landscape ? 4 : 3;
-    }
-
-    /**
-     * Интерфейс для взаимодействия с элементами в списке во фрагменте
-     */
-    public interface Callback {
-        void invoke(NumModel model);
     }
 }

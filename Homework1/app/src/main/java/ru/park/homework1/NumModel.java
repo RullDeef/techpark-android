@@ -5,8 +5,10 @@ import android.graphics.Color;
 import java.io.Serializable;
 
 public class NumModel implements Serializable {
+
     public static final int COLOR_EVEN = Color.RED;
     public static final int COLOR_ODD = Color.BLUE;
+
     private final int number;
     private final int color;
 
@@ -21,5 +23,12 @@ public class NumModel implements Serializable {
 
     public int getColor() {
         return color;
+    }
+
+    /**
+     * Интерфейс для взаимодействия с элементами в списке во фрагменте
+     */
+    public interface Callback {
+        void invoke(NumModel model);
     }
 }

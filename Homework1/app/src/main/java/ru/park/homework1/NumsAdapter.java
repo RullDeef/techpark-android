@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NumsAdapter extends RecyclerView.Adapter<NumViewHolder> {
 
-    private ListFragment.Callback callback;
+    private NumModel.Callback callback;
 
-    public void setCallback(ListFragment.Callback callback) {
+    public void setCallback(NumModel.Callback callback) {
         this.callback = callback;
     }
 

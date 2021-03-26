@@ -11,7 +11,7 @@ public class NumViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void feedData(final NumModel model, final ListFragment.Callback callback) {
+    public void feedData(final NumModel model, final NumModel.Callback callback) {
         TextView textView = itemView.findViewById(R.id.text_view);
 
         textView.setText(String.valueOf(model.getNumber()));

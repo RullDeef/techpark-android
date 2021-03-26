@@ -4,6 +4,14 @@ import java.util.ArrayList;
 
 public class NumModelRepository {
 
+    private static NumModelRepository instance;
+    private final ArrayList<NumModel> data = new ArrayList<>();
+
+    private NumModelRepository() {
+        for (int i = 1; i <= 100; i++)
+            data.add(new NumModel(i));
+    }
+
     public static NumModel getNumAt(int position) {
         return getInstance().data.get(position);
     }
@@ -24,12 +32,4 @@ public class NumModelRepository {
             instance = new NumModelRepository();
         return instance;
     }
-
-    private NumModelRepository() {
-        for (int i = 1; i <= 100; i++)
-            data.add(new NumModel(i));
-    }
-
-    private final ArrayList<NumModel> data = new ArrayList<>();
-    private static NumModelRepository instance;
 }

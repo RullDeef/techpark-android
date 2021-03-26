@@ -2,20 +2,18 @@ package ru.park.homework1;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ListFragment listFragment;
-    private DisplayFragment displayFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ListFragment listFragment;
+        final DisplayFragment displayFragment;
         if (savedInstanceState == null) {
             listFragment = new ListFragment();
             displayFragment = new DisplayFragment();
@@ -26,36 +24,23 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         } else {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(ListFragment.TAG);
-            if (fragment != null)
-                listFragment = (ListFragment) fragment;
-            else
-                listFragment = new ListFragment();
+            listFragment = fragment == null ? new ListFragment() : (ListFragment) fragment;
 
             fragment = getSupportFragmentManager().findFragmentByTag(DisplayFragment.TAG);
-            if (fragment != null) {
-                displayFragment = (DisplayFragment) fragment;
-                // load displayed model from bundle
-
-            }
-            else
-                displayFragment = new DisplayFragment();
+            displayFragment = fragment == null ? new DisplayFragment() : (DisplayFragment) fragment;
         }
 
-        listFragment.setCallback(new ListFragment.Callback() {
+        listFragment.setCallback(new NumModel.Callback() {
             @Override
             public void invoke(NumModel model) {
-                displayNumModel(model);
+                displayFragment.setDisplayNumModel(model);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, displayFragment, DisplayFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
-    }
-
-    private void displayNumModel(final @NonNull NumModel model) {
-        displayFragment.setDisplayNumModel(model);
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, displayFragment, DisplayFragment.TAG)
-                .addToBackStack(null)
-                .commit();
     }
 }
