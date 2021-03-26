@@ -17,7 +17,7 @@
         android:id="@+id/button_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="add item"
+        android:text="@string/add_item"
         android:textSize="20sp"
         android:layout_margin="20dp"/>
 
