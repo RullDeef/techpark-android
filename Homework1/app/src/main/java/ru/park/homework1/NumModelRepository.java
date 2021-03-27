@@ -44,8 +44,7 @@ public class NumModelRepository {
     public static void initRepo(Bundle state) {
         if (state == null)
             instance = new NumModelRepository();
-        else
-        {
+        else {
             int dataSize = state.getInt(BUNDLE_REPO_STATE, 0);
             for (int i = getInstance().data.size(); i < dataSize; i++)
                 appendNum();

@@ -7,11 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private ListFragment listFragment;
-
-    private DisplayFragment displayFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
         NumModelRepository.initRepo(savedInstanceState);
 
+        ListFragment listFragment;
         if (savedInstanceState != null) {
             listFragment = (ListFragment) getSupportFragmentManager()
                     .findFragmentByTag(ListFragment.TAG);
@@ -34,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         listFragment.setCallback(new NumModel.Callback() {
             @Override
             public void invoke(NumModel model) {
-                displayFragment = (DisplayFragment) getSupportFragmentManager()
+                DisplayFragment displayFragment = (DisplayFragment) getSupportFragmentManager()
                         .findFragmentByTag(DisplayFragment.TAG);
                 if (displayFragment == null)
                     displayFragment = new DisplayFragment();
