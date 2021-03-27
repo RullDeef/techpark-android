@@ -2,37 +2,42 @@ package ru.park.homework1;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private ListFragment listFragment;
+
+    private DisplayFragment displayFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListFragment listFragment;
-        final DisplayFragment displayFragment;
-        if (savedInstanceState == null) {
+        NumModelRepository.initRepo(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            listFragment = (ListFragment) getSupportFragmentManager()
+                    .findFragmentByTag(ListFragment.TAG);
+        } else {
             listFragment = new ListFragment();
-            displayFragment = new DisplayFragment();
 
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_container, listFragment, ListFragment.TAG)
                     .commit();
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ListFragment.TAG);
-            listFragment = fragment == null ? new ListFragment() : (ListFragment) fragment;
-
-            fragment = getSupportFragmentManager().findFragmentByTag(DisplayFragment.TAG);
-            displayFragment = fragment == null ? new DisplayFragment() : (DisplayFragment) fragment;
         }
 
         listFragment.setCallback(new NumModel.Callback() {
             @Override
             public void invoke(NumModel model) {
+                displayFragment = (DisplayFragment) getSupportFragmentManager()
+                        .findFragmentByTag(DisplayFragment.TAG);
+                if (displayFragment == null)
+                    displayFragment = new DisplayFragment();
                 displayFragment.setDisplayNumModel(model);
 
                 getSupportFragmentManager()
@@ -42,5 +47,11 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        NumModelRepository.saveRepo(outState);
     }
 }

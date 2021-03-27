@@ -1,6 +1,5 @@
 package ru.park.homework1;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,8 +35,9 @@ public class ListFragment extends Fragment {
         if (view == null)
             return null;
 
+        int colsCount = getContext().getResources().getInteger(R.integer.list_cols_count);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), getColsCount()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), colsCount));
 
         final NumsAdapter adapter = new NumsAdapter();
         adapter.setCallback(callback);
@@ -52,12 +52,5 @@ public class ListFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private int getColsCount() {
-        int orientation = getResources().getConfiguration().orientation;
-        boolean landscape = orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-        return landscape ? 4 : 3;
     }
 }

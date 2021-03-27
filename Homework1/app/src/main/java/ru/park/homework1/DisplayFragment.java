@@ -28,7 +28,7 @@ public class DisplayFragment extends Fragment {
             numModel = (NumModel) savedInstanceState.getSerializable(BUNDLE_NUM_MODEL_KEY);
 
         TextView textView = view.findViewById(R.id.text_view);
-        textView.setText(String.valueOf(numModel.getNumber()));
+        textView.setText(getString(R.string.display_number, numModel.getNumber()));
         textView.setTextColor(numModel.getColor());
     }
 

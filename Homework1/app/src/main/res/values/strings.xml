@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Homework1</string>
     <string name="add_item">add item</string>
+    <string name="display_number">%1$d</string>
 </resources>
